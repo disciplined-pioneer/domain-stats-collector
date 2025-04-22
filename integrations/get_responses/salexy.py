@@ -1,7 +1,7 @@
-import time
 import asyncio
 import aiohttp
 import pandas as pd
+from datetime import datetime
 
 
 class SalexyFetcher:
@@ -34,7 +34,7 @@ class SalexyFetcher:
                 if response.status == 200:
                     data = await response.json()
                     result = {
-                        'Timestamp': time.time(),
+                        'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                         'Website': domain,
                         'daily': data.get('daily', 'error'),
                         'weekly': data.get('weekly', 'error'),
@@ -43,7 +43,7 @@ class SalexyFetcher:
                     }
                 else:
                     result = {
-                        'Timestamp': time.time(),
+                        'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                         'Website': domain,
                         'daily': '-',
                         'weekly': '-',
@@ -55,7 +55,7 @@ class SalexyFetcher:
 
         except Exception as e:
             result = {
-                'Timestamp': time.time(),
+                'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                 'Website': domain,
                 'daily': '-',
                 'weekly': '-',

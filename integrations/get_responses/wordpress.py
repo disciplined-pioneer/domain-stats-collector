@@ -1,8 +1,9 @@
-import time
 import asyncio
 import aiohttp
+
 import pandas as pd
 from aiohttp import BasicAuth
+from datetime import datetime
 
 
 class WordpressFetcher:
@@ -42,7 +43,7 @@ class WordpressFetcher:
                 if response.status == 200:
                     data = await response.json()
                     result = {
-                        'Timestamp': time.time(),
+                        'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                         'Website': domain,
                         'daily': data.get('daily', 'error'),
                         'weekly': data.get('weekly', 'error'),
@@ -52,7 +53,7 @@ class WordpressFetcher:
 
                 else:
                     result = {
-                        'Timestamp': time.time(),
+                        'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                         'Website': domain,
                         'daily': '-',
                         'weekly': '-',
@@ -64,7 +65,7 @@ class WordpressFetcher:
 
         except Exception as e:
             result = {
-                'Timestamp': time.time(),
+                'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                 'Website': domain,
                 'daily': '-',
                 'weekly': '-',
