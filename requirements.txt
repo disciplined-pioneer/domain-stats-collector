@@ -1,0 +1,6 @@
+pydantic
+pydantic-settings
+google-auth
+gspread
+oauth2client
+gspread-formatting
