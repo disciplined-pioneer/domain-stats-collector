@@ -50,7 +50,7 @@ class SalexyFetcher:
                         'monthly': '-',
                         'Status': '❌ ERROR'
                     }
-                    print(f"❌ Ошибка для {domain}: {response.status}")
+                    print(f"❌ Ошибка для {domain} | {response.status}")
                 self.results.append(result)
 
         except Exception as e:
@@ -63,5 +63,5 @@ class SalexyFetcher:
                 'Status': '❌ ERROR'
             }
             self.results.append(result)
-            print(f"❌ Ошибка для {domain}: {e}")
+            print(f"❌ Ошибка для {domain} | {e}")
 
