@@ -13,5 +13,5 @@ df = pd.DataFrame({
 values = [df.columns.tolist()] + df.values.tolist()
 
 # Вставка
-worksheet = authorize_spreadsheet('Лист1')
+worksheet = authorize_spreadsheet().worksheet('Лист1')
 worksheet.update(range_name="A30", values=values)
