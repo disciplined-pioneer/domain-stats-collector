@@ -4,8 +4,6 @@ import aiohttp
 import pandas as pd
 from aiohttp import BasicAuth
 
-from settings import settings
-
 
 class DLEFetcher:
 
@@ -75,29 +73,3 @@ class DLEFetcher:
             }
             self.results.append(result)
             print(f"❌ Ошибка для {domain}: {e}")
-
-
-# Пример использования
-if __name__ == "__main__":
-
-    domains = [
-        "mostbet-casinokz.kz",
-        "mostbet-bangladesh.org",
-        "1-win-az.org",
-        "wawada.kz",
-        "vavada.es",
-        "1-win-eg.com",
-        "mostbet-maroc.org",
-        "wawada.pl",
-        "pin-co.az"
-    ]
-
-    
-    # Инициализация класса с доменами и учетными данными
-    fetcher = DLEFetcher(domains, settings.bot.WP_USERNAME, settings.bot.WP_PASSWORD)
-    
-    # Получение DataFrame с результатами
-    df = asyncio.run(fetcher.fetch_pwa_stats())
-    
-    # Вывод результата
-    print(df)

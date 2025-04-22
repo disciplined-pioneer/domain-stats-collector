@@ -4,8 +4,6 @@ import aiohttp
 import pandas as pd
 from aiohttp import BasicAuth
 
-from settings import settings
-
 
 class WordpressFetcher:
 
@@ -76,17 +74,3 @@ class WordpressFetcher:
             self.results.append(result)
             print(f"❌ Ошибка для {domain}: {e}")
 
-
-# Пример использования
-if __name__ == "__main__":
-
-    domains = ['mostbet-ar.net', '1xbet-ua.com', 'mostbet-bd.biz', 'fallos.ar', 'mostbetua.org', 'krsk2019.ru', '1wineg.biz', 'mostbet-no.org', 'onedivision.ru', '1-win.az', '1win-bett.com.br', '1xbet-bangladesh.org', '1xbetapk.biz', 'mostbet-es.net', 'mostbet-kz.org', '1xbetfr.org', '1wineg.org', 'openbugs.net', '1xbet-ar.biz', 'mostbet.spas-extreme.ru', 'mostbetcasino.pl', 'mostbet-fr.org', 'mostbetcasino.in', 'mostbet-cassino.com.br', 'mostbet-hu.org']
-    
-    # Инициализация класса с доменами и учетными данными
-    fetcher = WordpressFetcher(domains, settings.bot.WP_USERNAME, settings.bot.WP_PASSWORD)
-    
-    # Получение DataFrame с результатами
-    df = asyncio.run(fetcher.fetch_pwa_stats())
-    
-    # Вывод результата
-    print(df)

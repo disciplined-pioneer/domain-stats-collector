@@ -3,6 +3,7 @@ import asyncio
 import aiohttp
 import pandas as pd
 
+
 class SalexyFetcher:
 
     """Класс для получения данных с сайтов по их доменам - SALEXY"""
@@ -64,19 +65,3 @@ class SalexyFetcher:
             self.results.append(result)
             print(f"❌ Ошибка для {domain}: {e}")
 
-
-# Пример использования
-if __name__ == "__main__":
-
-    domains = [
-        "salexy.kz"
-    ]
-
-    # Инициализация класса с доменами
-    fetcher = SalexyFetcher(domains)
-    
-    # Получение DataFrame с результатами
-    df = asyncio.run(fetcher.fetch_pwa_stats())
-    
-    # Вывод результата
-    print(df)
