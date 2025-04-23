@@ -29,6 +29,7 @@ def authorize_spreadsheet():
 
 # Создание  нужных листов, согласно списку + настройка стилей
 def create_sheets(list_sheets: List[str] = ["Daily_Stats", "Weekly_Stats", "Monthly_Stats"]) -> None:
+
     spreadsheet = authorize_spreadsheet()
 
     # Настройка стилей
@@ -45,7 +46,7 @@ def create_sheets(list_sheets: List[str] = ["Daily_Stats", "Weekly_Stats", "Mont
     # Проходимся по всем листам
     for sheet in list_sheets:
         try:
-            spreadsheet.add_worksheet(title=sheet, rows="100", cols="20")
+            spreadsheet.add_worksheet(title=sheet, rows="1000", cols="20")
             worksheet = spreadsheet.worksheet(sheet)
             worksheet.update("A1", [["Timestamp", "Website", "Count", "Delta", "Status"]])
             format_cell_range(worksheet, 'A1:E1', header_format)
