@@ -1,6 +1,6 @@
 import pandas as pd
 from utils.google_sheets import get_sheet_data_as_df
-from integrations.google_sheets.google_sheets import authorize_spreadsheet
+from integrations.google_sheets.google_sheets import authorize_spreadsheet, apply_conditional_formatting
 
 
 # Объедение старых данных (excel), с новыми из запроса
@@ -54,3 +54,6 @@ async def update_stats_sheet(time_variable: str, new_data: pd.DataFrame):
     values = [result.columns.tolist()] + result.values.tolist()
     worksheet = authorize_spreadsheet().worksheet(name_sheet)
     worksheet.update(range_name="A1", values=values)
+
+    # Раскрашиваем ячейки
+    apply_conditional_formatting(worksheet)
