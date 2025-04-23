@@ -41,8 +41,8 @@ async def main():
 
 if __name__ == "__main__":
     try:
-        create_sheets()  # Создаём листы
         print("\nСкрипт запущен ✅\n")
+        create_sheets()  # Создаём листы
         asyncio.run(main())
 
     except KeyboardInterrupt:
