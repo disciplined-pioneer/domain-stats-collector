@@ -12,12 +12,23 @@ logging.basicConfig(level=logging.INFO)
 # Главный цикл репортера, запускается раз в сутки
 async def reporter_loop():
 
-    # Скачиваем данные и добавляем в таблицу
-    time_variables = get_active_time_variables()
-    new_data = await get_all_data()
-    for time_variable in time_variables:
-        await update_stats_sheet(time_variable, new_data)
-    print('Данные заполнены!')
+    test_dates = [
+        datetime(2025, 4, 20),  # сегодня воскресенье
+        datetime(2025, 4, 30),  # последний день месяца
+        datetime(2025, 5, 1),   # первый день нового месяца
+        datetime(2025, 4, 23),  # обычный день
+    ]
+
+    # Тестируем для разных дат
+    for test_date in test_dates:
+        time_variables = get_active_time_variables(test_date)
+        print(f"Тестируем {test_date.strftime('%Y-%m-%d')}: {time_variables}")
+
+
+        new_data = await get_all_data()
+        for time_variable in time_variables:
+            await update_stats_sheet(time_variable, new_data)
+        print('Данные заполнены!\n')
 
 
 async def main():

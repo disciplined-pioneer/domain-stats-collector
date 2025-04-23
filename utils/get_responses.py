@@ -61,9 +61,8 @@ async def update_stats_sheet(time_variable: str, new_data: pd.DataFrame):
 
 
 # Получение списка нужных значений
-def get_active_time_variables() -> list[str]:
+def get_active_time_variables(today: datetime = datetime.today()) -> list[str]:
 
-    today = datetime.today()
     result = ['daily']  # всегда делаем daily
 
     # Если сегодня воскресенье — добавляем weekly
