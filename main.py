@@ -1,6 +1,7 @@
 import logging
 import asyncio
 from datetime import datetime, timedelta
+
 from utils.get_responses import *
 from integrations.get_responses.fetchers import get_all_data
 from integrations.google_sheets.google_sheets import create_sheets
@@ -12,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 # Ожидание до 23:55
 async def wait_until_midnight():
     now = datetime.now()
-    future = now.replace(hour=21, minute=15, second=0, microsecond=0)
+    future = now.replace(hour=23, minute=55, second=0, microsecond=0)
     if future <= now:
         future += timedelta(days=1)
     await asyncio.sleep((future - now).total_seconds())
