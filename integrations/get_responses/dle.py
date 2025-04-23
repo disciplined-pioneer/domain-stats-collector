@@ -49,15 +49,17 @@ class DLEFetcher:
                         'daily': data.get('daily', 'error'),
                         'weekly': data.get('weekly', 'error'),
                         'monthly': data.get('monthly', 'error'),
+                        'Delta': 0,
                         'Status': 'ОК!'
                     }
                 else:
                     result = {
                         'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                         'Website': domain,
-                        'daily': '-',
-                        'weekly': '-',
-                        'monthly': '-',
+                        'daily': 0,
+                        'weekly': 0,
+                        'monthly': 0,
+                        'Delta': 0,
                         'Status': '❌ ERROR'
                     }
                     print(f"❌ Ошибка для {domain} | {response.status}")
@@ -67,9 +69,10 @@ class DLEFetcher:
             result = {
                 'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                 'Website': domain,
-                'daily': '-',
-                'weekly': '-',
-                'monthly': '-',
+                'daily': 0,
+                'weekly': 0,
+                'monthly': 0,
+                'Delta': 0,
                 'Status': '❌ ERROR'
             }
             self.results.append(result)
