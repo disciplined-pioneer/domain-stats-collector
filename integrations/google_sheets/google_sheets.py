@@ -2,8 +2,18 @@ import gspread
 from typing import List
 import unicodedata
 from settings import settings
+from gspread_formatting import *
 from google.oauth2.service_account import Credentials
-from gspread_formatting import format_cell_range, CellFormat, Color, TextFormat
+
+from gspread_formatting import (
+    get_conditional_format_rules,
+    ConditionalFormatRule,
+    BooleanRule,
+    CellFormat,
+    Color,
+    BooleanCondition,
+    GridRange
+)
 
 
 # Нормализация для проверки слов
@@ -56,51 +66,57 @@ def create_sheets(list_sheets: List[str] = ["Daily_Stats", "Weekly_Stats", "Mont
             print(f"Лист '{sheet}' уже существует или произошла ошибка: {e}")
 
         except Exception as e:
-            print(f"Произолша ошибка: {e}")
+            print(f"Произошла ошибка: {e}")
+
+        apply_conditional_formatting(sheet) # Настраиваем окрашивания
 
     print("Листы успешно созданы.")
 
 
 # Закрашиваем ячейки нужными цветами
-def apply_conditional_formatting(worksheet):
+def apply_conditional_formatting(sheet_name):
     
-    return
-
+    worksheet = authorize_spreadsheet().worksheet(sheet_name)
     sheet_id = worksheet._properties['sheetId']
+    rules = get_conditional_format_rules(worksheet)
 
-    rules = [
-        # D column: Delta > 0 — зелёный
-        ConditionalFormatRule(
-            ranges=[GridRange(sheet_id=sheet_id, start_row_index=1, start_column_index=3, end_column_index=4)],
-            booleanRule=BooleanRule(
-                condition=BooleanCondition(type='NUMBER_GREATER', values=['0']),
-                format=CellFormat(backgroundColor=Color(0.6, 0.9, 0.6))
-            )
-        ),
-        # D column: Delta < 0 — красный
-        ConditionalFormatRule(
-            ranges=[GridRange(sheet_id=sheet_id, start_row_index=1, start_column_index=3, end_column_index=4)],
-            booleanRule=BooleanRule(
-                condition=BooleanCondition(type='NUMBER_LESS', values=['0']),
-                format=CellFormat(backgroundColor=Color(0.95, 0.6, 0.6))
-            )
-        ),
-        # D column: Delta == 0 — серый
-        ConditionalFormatRule(
-            ranges=[GridRange(sheet_id=sheet_id, start_row_index=1, start_column_index=3, end_column_index=4)],
-            booleanRule=BooleanRule(
-                condition=BooleanCondition(type='NUMBER_EQ', values=['0']),
-                format=CellFormat(backgroundColor=Color(0.85, 0.85, 0.85))
-            )
-        ),
-        # E column: Status == ❌ ERROR — серый
-        ConditionalFormatRule(
-            ranges=[GridRange(sheet_id=sheet_id, start_row_index=1, start_column_index=4, end_column_index=5)],
-            booleanRule=BooleanRule(
-                condition=BooleanCondition(type='TEXT_EQ', values=['❌ ERROR']),
-                format=CellFormat(backgroundColor=Color(0.85, 0.85, 0.85))
-            )
-        ),
-    ]
+    # Очистим старые правила, если нужно
+    rules.clear()
 
+    # D column: Delta > 0 — зелёный
+    rules.append(ConditionalFormatRule(
+        ranges=[GridRange(sheetId=sheet_id, startRowIndex=1, startColumnIndex=3, endColumnIndex=4)],
+        booleanRule=BooleanRule(
+            condition=BooleanCondition(type='NUMBER_GREATER', values=['0']),
+            format=CellFormat(backgroundColor=Color(0.6, 0.9, 0.6))
+        )
+    ))
 
+    # D column: Delta < 0 — красный
+    rules.append(ConditionalFormatRule(
+        ranges=[GridRange(sheetId=sheet_id, startRowIndex=1, startColumnIndex=3, endColumnIndex=4)],
+        booleanRule=BooleanRule(
+            condition=BooleanCondition(type='NUMBER_LESS', values=['0']),
+            format=CellFormat(backgroundColor=Color(0.95, 0.6, 0.6))
+        )
+    ))
+
+    # D column: Delta == 0 — серый
+    rules.append(ConditionalFormatRule(
+        ranges=[GridRange(sheetId=sheet_id, startRowIndex=1, startColumnIndex=3, endColumnIndex=4)],
+        booleanRule=BooleanRule(
+            condition=BooleanCondition(type='NUMBER_EQ', values=['0']),
+            format=CellFormat(backgroundColor=Color(0.85, 0.85, 0.85))
+        )
+    ))
+
+    # E column: Status == ❌ ERROR — серый
+    rules.append(ConditionalFormatRule(
+        ranges=[GridRange(sheetId=sheet_id, startRowIndex=1, startColumnIndex=4, endColumnIndex=5)],
+        booleanRule=BooleanRule(
+            condition=BooleanCondition(type='TEXT_EQ', values=['❌ ERROR']),
+            format=CellFormat(backgroundColor=Color(0.85, 0.85, 0.85))
+        )
+    ))
+
+    rules.save()
