@@ -42,21 +42,26 @@ async def data_merging(old_df, new_df):
 
 
 
-async def main(time_variable: str):
+async def update_stats_sheet(time_variable: str, new_data: pd.DataFrame):
 
     # Получаем все данные из доменов + excel
     name_sheet = f"{time_variable.capitalize()}_Stats"
     old_df = await get_sheet_data_as_df(name_sheet)
-    new_df = await get_all_data()
-    df = new_df[["Timestamp", "Website", time_variable, 'Delta', "Status"]].rename(columns={time_variable: "Count"})
+    df = new_data[["Timestamp", "Website", time_variable, 'Delta', "Status"]].rename(columns={time_variable: "Count"})
 
     # Преобразование и добавление данных
     result = await data_merging(old_df, df)
     values = [result.columns.tolist()] + result.values.tolist()
     worksheet = authorize_spreadsheet().worksheet(name_sheet)
     worksheet.update(range_name="A1", values=values)
+
+
+async def main():
+    time_variable = 'weekly'
+    new_data = await get_all_data()
+    await update_stats_sheet(time_variable, new_data)
     
 
 if __name__ == "__main__":
-    time_variable = 'weekly'
-    asyncio.run(main(time_variable))
+    
+    asyncio.run(main())
