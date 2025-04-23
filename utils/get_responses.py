@@ -1,8 +1,9 @@
-import asyncio
 import pandas as pd
-from integrations.get_responses.fetchers import get_all_data
-from integrations.google_sheets.google_sheets import get_sheet_data_as_df, authorize_spreadsheet
+from utils.google_sheets import get_sheet_data_as_df
+from integrations.google_sheets.google_sheets import authorize_spreadsheet
 
+
+# Объедение старых данных (excel), с новыми из запроса
 async def data_merging(old_df, new_df):
 
     # Конкатенация DataFrame
@@ -40,8 +41,7 @@ async def data_merging(old_df, new_df):
     return df
 
 
-
-
+# Функция для добавления данных в таблицу excel
 async def update_stats_sheet(time_variable: str, new_data: pd.DataFrame):
 
     # Получаем все данные из доменов + excel
@@ -54,14 +54,3 @@ async def update_stats_sheet(time_variable: str, new_data: pd.DataFrame):
     values = [result.columns.tolist()] + result.values.tolist()
     worksheet = authorize_spreadsheet().worksheet(name_sheet)
     worksheet.update(range_name="A1", values=values)
-
-
-async def main():
-    time_variable = 'weekly'
-    new_data = await get_all_data()
-    await update_stats_sheet(time_variable, new_data)
-    
-
-if __name__ == "__main__":
-    
-    asyncio.run(main())
