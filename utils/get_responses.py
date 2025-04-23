@@ -19,18 +19,13 @@ async def data_merging(old_df, new_df):
     df['Count'] = pd.to_numeric(df['Count'], errors='coerce')
     df['Delta'] = df.groupby('Website')['Count'].diff()
 
-    # Приводим 'Count' и 'Delta' к строковому типу, чтобы избежать проблем при замене значений
-    df['Count'] = df['Count'].astype(str)
-    df['Delta'] = df['Delta'].astype(str)
-
     # Сортируем по Timestamp
     df = df.sort_values(by=['Timestamp', 'Website'])
 
-    # Заменяем значения на '-' в строках с ошибкой
-    df.loc[df['Status'] == '❌ ERROR', ['Count', 'Delta']] = '-'
-
     # Заменяем NaN на '0' в Delta
     df['Delta'] = df['Delta'].replace('nan', '0')
+    df['Delta'] = df['Delta'].fillna(0)
+    df['Delta'] = df['Delta'].apply(lambda x: 0 if x == 0.0 else x)
 
     # Заполняем NaN значениями '-'
     df.fillna('-', inplace=False)

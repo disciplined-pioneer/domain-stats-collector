@@ -83,12 +83,21 @@ def apply_conditional_formatting(sheet_name):
     # Очистим старые правила, если нужно
     rules.clear()
 
+    # D column: Delta == 0 — серый
+    rules.append(ConditionalFormatRule(
+        ranges=[GridRange(sheetId=sheet_id, startRowIndex=1, startColumnIndex=3, endColumnIndex=4)],
+        booleanRule=BooleanRule(
+            condition=BooleanCondition(type='NUMBER_EQ', values=['0']),  # Для чисел, равных '0' (как строка)
+            format=CellFormat(backgroundColor=Color(0.85, 0.85, 0.85))  # Серый
+        )
+    ))
+
     # D column: Delta > 0 — зелёный
     rules.append(ConditionalFormatRule(
         ranges=[GridRange(sheetId=sheet_id, startRowIndex=1, startColumnIndex=3, endColumnIndex=4)],
         booleanRule=BooleanRule(
-            condition=BooleanCondition(type='NUMBER_GREATER', values=['0']),
-            format=CellFormat(backgroundColor=Color(0.6, 0.9, 0.6))
+            condition=BooleanCondition(type='NUMBER_GREATER', values=['0']),  # Для чисел, больше '0' (как строка)
+            format=CellFormat(backgroundColor=Color(0.6, 0.9, 0.6))  # Зеленый
         )
     ))
 
@@ -96,17 +105,8 @@ def apply_conditional_formatting(sheet_name):
     rules.append(ConditionalFormatRule(
         ranges=[GridRange(sheetId=sheet_id, startRowIndex=1, startColumnIndex=3, endColumnIndex=4)],
         booleanRule=BooleanRule(
-            condition=BooleanCondition(type='NUMBER_LESS', values=['0']),
-            format=CellFormat(backgroundColor=Color(0.95, 0.6, 0.6))
-        )
-    ))
-
-    # D column: Delta == 0 — серый
-    rules.append(ConditionalFormatRule(
-        ranges=[GridRange(sheetId=sheet_id, startRowIndex=1, startColumnIndex=3, endColumnIndex=4)],
-        booleanRule=BooleanRule(
-            condition=BooleanCondition(type='NUMBER_EQ', values=['0']),
-            format=CellFormat(backgroundColor=Color(0.85, 0.85, 0.85))
+            condition=BooleanCondition(type='NUMBER_LESS', values=['0']),  # Для чисел, меньше '0' (как строка)
+            format=CellFormat(backgroundColor=Color(0.95, 0.6, 0.6))  # Красный
         )
     ))
 
