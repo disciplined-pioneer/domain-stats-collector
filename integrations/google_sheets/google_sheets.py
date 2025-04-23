@@ -60,13 +60,11 @@ def create_sheets(list_sheets: List[str] = ["Daily_Stats", "Weekly_Stats", "Mont
     print("Листы успешно созданы.")
 
 
-
-from gspread_formatting import *
-from gspread_formatting.dataframe import CellFormat
-from gspread_formatting.models import GridRange
-
 # Закрашиваем ячейки нужными цветами
 def apply_conditional_formatting(worksheet):
+    
+    return
+
     sheet_id = worksheet._properties['sheetId']
 
     rules = [

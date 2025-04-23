@@ -1,6 +1,7 @@
 import pandas as pd
+from datetime import datetime, timedelta
 from utils.google_sheets import get_sheet_data_as_df
-from integrations.google_sheets.google_sheets import authorize_spreadsheet, apply_conditional_formatting
+from integrations.google_sheets.google_sheets import authorize_spreadsheet
 
 
 # Объедение старых данных (excel), с новыми из запроса
@@ -56,4 +57,22 @@ async def update_stats_sheet(time_variable: str, new_data: pd.DataFrame):
     worksheet.update(range_name="A1", values=values)
 
     # Раскрашиваем ячейки
-    apply_conditional_formatting(worksheet)
+    #apply_conditional_formatting(worksheet)
+
+
+# Получение списка нужных значений
+def get_active_time_variables() -> list[str]:
+
+    today = datetime.today()
+    result = ['daily']  # всегда делаем daily
+
+    # Если сегодня воскресенье — добавляем weekly
+    if today.weekday() == 6:
+        result.append('weekly')
+
+    # Если завтра уже другой месяц — добавляем monthly
+    tomorrow = today + timedelta(days=1)
+    if tomorrow.month != today.month:
+        result.append('monthly')
+
+    return result
