@@ -17,7 +17,7 @@ async def load_json_data(file_path: str):
 # Получаем все данные по доменам
 async def get_all_data():
 
-    domains = await load_json_data('domains_config.json')
+    domains = await load_json_data(settings.bot.PATH_ALL_DOMAINS_JSON)
 
     # Получаем все данные из Wordpress
     fetcher_wp = WordpressFetcher(domains.get("Wordpress", []), settings.bot.WP_USERNAME, settings.bot.WP_PASSWORD)

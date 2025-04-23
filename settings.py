@@ -7,6 +7,7 @@ class Bot(BaseSettings):
     WP_PASSWORD: str
 
     GSHEETS_CREDENTIALS_JSON: str
+    PATH_ALL_DOMAINS_JSON: str
     SHEETS_NAME: str
 
     CHECK_INTERVAL_DAILY: str

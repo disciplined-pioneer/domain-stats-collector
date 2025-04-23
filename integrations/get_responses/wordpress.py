@@ -8,9 +8,7 @@ from datetime import datetime
 
 class WordpressFetcher:
 
-
     """Класс для получения данных с сайтов по их доменам - WORDPRESS"""
-
 
     def __init__(self, domains, username, password):
         self.domains = domains
