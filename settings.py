@@ -10,10 +10,6 @@ class Bot(BaseSettings):
     PATH_ALL_DOMAINS_JSON: str
     SHEETS_NAME: str
 
-    CHECK_INTERVAL_DAILY: str
-    CHECK_INTERVAL_WEEKLY: str
-    CHECK_INTERVAL_MONTHLY: str
-
     class Config:
         env_file = '.env'
         extra = 'ignore'
