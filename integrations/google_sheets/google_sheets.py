@@ -1,4 +1,5 @@
 import gspread
+import pandas as pd
 from typing import List
 from settings import settings
 from google.oauth2.service_account import Credentials
@@ -52,3 +53,26 @@ def create_sheets(list_sheets: List[str] = ["Daily_Stats", "Weekly_Stats", "Mont
             print(f"Произолша ошибка: {e}")
 
     print("Листы успешно созданы.")
+
+
+# Нормализация строки
+def normalize_row(row, length):
+    return row + [None] * (length - len(row))
+
+
+# Получение значений из диапазона колонок
+async def get_sheet_data_as_df(sheet_name: str) -> pd.DataFrame:
+    spreadsheet = authorize_spreadsheet()
+    sheet = spreadsheet.worksheet(sheet_name)
+
+    values = sheet.get("A:E")
+
+    # Обработка случая, если вообще нет данных
+    if not values or all(not any(cell.strip() for cell in row) for row in values):
+        return pd.DataFrame()  # Пустой df
+
+    headers = values[0]
+    data = [normalize_row(row, len(headers)) for row in values[1:]]
+
+    df = pd.DataFrame(data, columns=headers)
+    return df
