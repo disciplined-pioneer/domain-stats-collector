@@ -15,6 +15,7 @@ logging.basicConfig(level=logging.INFO)
 async def wait_until_midnight():
     now = datetime.now()
     MINUTE, HOUR = map(int, settings.bot.CHECK_INTERVAL_DAILY_CRON.split()[:2])
+    print(f'Запуск скрипта в {HOUR}:{MINUTE}')
     future = now.replace(hour=HOUR, minute=MINUTE, second=0, microsecond=0)
     if future <= now:
         future += timedelta(days=1)
