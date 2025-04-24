@@ -40,7 +40,7 @@ class SalexyFetcher:
                         'weekly': data.get('weekly', 'error'),
                         'monthly': data.get('monthly', 'error'),
                         'Delta': 0,
-                        'Status': 'ОК!'
+                        'Status': '✅ OK'
                     }
                 else:
                     result = {

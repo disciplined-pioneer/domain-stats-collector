@@ -7,7 +7,7 @@
 - Делает GET-запросы к заранее заданным доменам.
 - Извлекает ключевые данные (например, редиректы или статус страниц).
 - Записывает результат в Google Sheets: **Daily_Stats**, **Weekly_Stats**, **Monthly_Stats**.
-- Работает в автоматическом режиме, запускается ежедневно в 23:55.
+- Работает в автоматическом режиме, запускается ежедневно в 23:55 (настройку времмени можно произвести в файле .env - CHECK_INTERVAL_DAILY_CRON)
 
 ---
 
@@ -58,6 +58,9 @@ WP_PASSWORD=
 GSHEETS_CREDENTIALS_JSON=config/service_account.json
 PATH_ALL_DOMAINS_JSON=config/domains_config.json
 SHEETS_NAME= # Название таблицы excel
+
+# Запуск скрипта каждый день в 23:55 (cron)
+CHECK_INTERVAL_DAILY_CRON = "55 23 * * *"
 ```
 
 ### `domains_config.json`
