@@ -87,10 +87,11 @@ def apply_conditional_formatting(sheet_name):
     rules.append(ConditionalFormatRule(
         ranges=[GridRange(sheetId=sheet_id, startRowIndex=1, startColumnIndex=3, endColumnIndex=4)],
         booleanRule=BooleanRule(
-            condition=BooleanCondition(type='NUMBER_EQ', values=['0']),  # Для чисел, равных '0' (как строка)
-            format=CellFormat(backgroundColor=Color(0.85, 0.85, 0.85))  # Серый
+            condition=BooleanCondition(type='NUMBER_EQ', values=['0']),  # Для чисел, равных '0'
+            format=CellFormat(backgroundColor=Color(1, 1, 1))  # Белый цвет
         )
     ))
+
 
     # D column: Delta > 0 — зелёный
     rules.append(ConditionalFormatRule(
