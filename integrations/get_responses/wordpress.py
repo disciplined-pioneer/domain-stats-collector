@@ -1,10 +1,13 @@
 import asyncio
 import aiohttp
-
 import pandas as pd
-from aiohttp import BasicAuth
 from datetime import datetime
+from aiohttp import BasicAuth
+import logging
 
+
+# Настройка логирования
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class WordpressFetcher:
 
@@ -16,10 +19,8 @@ class WordpressFetcher:
         self.password = password
         self.results = []
 
-
     # Асинхронная функция для выполнения запросов и сбора данных в DataFrame
     async def fetch_pwa_stats(self):
-
         auth = BasicAuth(self.username, self.password)
         async with aiohttp.ClientSession(auth=auth) as session:
             tasks = []
@@ -33,7 +34,6 @@ class WordpressFetcher:
         df = pd.DataFrame(self.results)
         return df
 
-
     # Функция для получения данных с каждого домена
     async def fetch_for_domain(self, session, domain, url):
         try:
@@ -43,9 +43,9 @@ class WordpressFetcher:
                     result = {
                         'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                         'Website': domain,
-                        'daily': data.get('daily', 'error'),
-                        'weekly': data.get('weekly', 'error'),
-                        'monthly': data.get('monthly', 'error'),
+                        'День': data.get('daily', 'error'),
+                        'Неделя': data.get('weekly', 'error'),
+                        'Месяц': data.get('monthly', 'error'),
                         'Delta': 0,
                         'Status': '✅ OK'
                     }
@@ -54,25 +54,24 @@ class WordpressFetcher:
                     result = {
                         'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                         'Website': domain,
-                        'daily': 0,
-                        'weekly': 0,
-                        'monthly': 0,
+                        'День': 0,
+                        'Неделя': 0,
+                        'Месяц': 0,
                         'Delta': 0,
                         'Status': '❌ ERROR'
                     }
-                    print(f"❌ Ошибка для {domain} | {response.status}")
+                    logging.error(f"❌ Ошибка для {domain} | {response.status}")
                 self.results.append(result)
 
         except Exception as e:
             result = {
                 'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                 'Website': domain,
-                'daily': 0,
-                'weekly': 0,
-                'monthly': 0,
+                'День': 0,
+                'Неделя': 0,
+                'Месяц': 0,
                 'Delta': 0,
                 'Status': '❌ ERROR'
             }
             self.results.append(result)
-            print(f"❌ Ошибка для {domain} | {e}")
-
+            logging.error(f"❌ Ошибка для {domain} | {e}")

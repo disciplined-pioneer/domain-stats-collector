@@ -41,7 +41,7 @@ async def data_merging(old_df, new_df):
 async def update_stats_sheet(time_variable: str, new_data: pd.DataFrame):
 
     # Получаем все данные из доменов + excel
-    name_sheet = f"{time_variable.capitalize()}_Stats"
+    name_sheet = f"{time_variable.capitalize()}"
     old_df = await get_sheet_data_as_df(name_sheet)
     df = new_data[["Timestamp", "Website", time_variable, 'Delta', "Status"]].rename(columns={time_variable: "Count"})
 
@@ -55,15 +55,15 @@ async def update_stats_sheet(time_variable: str, new_data: pd.DataFrame):
 # Получение списка нужных значений
 def get_active_time_variables(today: datetime = datetime.today()) -> list[str]:
 
-    result = ['daily']  # всегда делаем daily
+    result = ['День']  # всегда делаем daily
 
     # Если сегодня воскресенье — добавляем weekly
     if today.weekday() == 6:
-        result.append('weekly')
+        result.append('Неделя')
 
     # Если завтра уже другой месяц — добавляем monthly
     tomorrow = today + timedelta(days=1)
     if tomorrow.month != today.month:
-        result.append('monthly')
+        result.append('Месяц')
 
     return result

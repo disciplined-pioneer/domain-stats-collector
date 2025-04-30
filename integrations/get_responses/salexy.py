@@ -2,7 +2,11 @@ import asyncio
 import aiohttp
 import pandas as pd
 from datetime import datetime
+import logging
 
+
+# Настройка логирования
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class SalexyFetcher:
 
@@ -36,9 +40,9 @@ class SalexyFetcher:
                     result = {
                         'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                         'Website': domain,
-                        'daily': data.get('daily', 'error'),
-                        'weekly': data.get('weekly', 'error'),
-                        'monthly': data.get('monthly', 'error'),
+                        'День': data.get('daily', 'error'),
+                        'Неделя': data.get('weekly', 'error'),
+                        'Месяц': data.get('monthly', 'error'),
                         'Delta': 0,
                         'Status': '✅ OK'
                     }
@@ -46,25 +50,24 @@ class SalexyFetcher:
                     result = {
                         'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                         'Website': domain,
-                        'daily': 0,
-                        'weekly': 0,
-                        'monthly': 0,
+                        'День': 0,
+                        'Неделя': 0,
+                        'Месяц': 0,
                         'Delta': 0,
                         'Status': '❌ ERROR'
                     }
-                    print(f"❌ Ошибка для {domain} | {response.status}")
+                    logging.error(f"❌ Ошибка для {domain} | {response.status}")
                 self.results.append(result)
 
         except Exception as e:
             result = {
                 'Timestamp': datetime.now().strftime('%Y-%m-%d %H:%M'),
                 'Website': domain,
-                'daily': 0,
-                'weekly': 0,
-                'monthly': 0,
+                'День': 0,
+                'Неделя': 0,
+                'Месяц': 0,
                 'Delta': 0,
                 'Status': '❌ ERROR'
             }
             self.results.append(result)
-            print(f"❌ Ошибка для {domain} | {e}")
-
+            logging.error(f"❌ Ошибка для {domain} | {e}")
