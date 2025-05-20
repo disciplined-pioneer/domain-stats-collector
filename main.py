@@ -31,6 +31,8 @@ async def reporter_loop():
 
             # Скачиваем данные и добавляем в таблицу
             time_variables = get_active_time_variables()
+            logging.info(f"Работаем с таблицами: {time_variables}")
+
             new_data = await get_all_data()
             for time_variable in time_variables:
                 await update_stats_sheet(time_variable, new_data)

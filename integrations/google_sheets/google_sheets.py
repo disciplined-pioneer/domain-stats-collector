@@ -97,14 +97,17 @@ def create_sheets(list_sheets: List[str] = ["День", "Неделя", "Мес�
             worksheet = spreadsheet.worksheet(sheet_title)
             logging.info(f"Лист '{sheet_title}' уже существует.")
         except gspread.exceptions.WorksheetNotFound:
+
+            # Создание
             worksheet = spreadsheet.add_worksheet(title=sheet_title, rows="1000", cols="20")
             logging.info(f"Лист '{sheet_title}' создан.")
 
-        try:
+            # Форматирование
             apply_conditional_formatting(worksheet)
             worksheet.update("A1:E1", [["Timestamp", "Website", "Count", "Delta", "Status"]])
             format_cell_range(worksheet, 'A1:E1', header_format)
             logging.info(f"Лист '{sheet_title}' отформатирован.")
+
         except Exception as e:
             traceback.print_exc()
             logging.error(f"Ошибка при настройке листа '{sheet_title}': {str(e)}")
