@@ -53,7 +53,10 @@ async def update_stats_sheet(time_variable: str, new_data: pd.DataFrame):
 
 
 # Получение списка нужных значений
-def get_active_time_variables(today: datetime = datetime.today()) -> list[str]:
+def get_active_time_variables(today: datetime = None) -> list[str]:
+    
+    if today is None:
+        today = datetime.today()
 
     result = ['День']  # всегда делаем daily
 

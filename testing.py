@@ -18,7 +18,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 async def reporter_loop():
 
     test_dates = [
-        datetime(2025, 4, 30),  # последний день месяца
         datetime(2025, 4, 27),  # воскресенье
     ]
 
