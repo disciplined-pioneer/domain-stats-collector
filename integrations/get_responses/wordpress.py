@@ -6,9 +6,6 @@ from aiohttp import BasicAuth
 import logging
 
 
-# Настройка логирования
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
 class WordpressFetcher:
 
     """Класс для получения данных с сайтов по их доменам - WORDPRESS"""

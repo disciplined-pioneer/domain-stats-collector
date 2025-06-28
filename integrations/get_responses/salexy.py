@@ -5,9 +5,6 @@ from datetime import datetime
 import logging
 
 
-# Настройка логирования
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
 class SalexyFetcher:
 
     """Класс для получения данных с сайтов по их доменам - SALEXY"""

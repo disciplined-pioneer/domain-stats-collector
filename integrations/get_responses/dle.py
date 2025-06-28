@@ -6,9 +6,6 @@ from datetime import datetime
 import logging
 
 
-# Настройка логирования
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
 class DLEFetcher:
 
     """Класс для получения данных с сайтов по их доменам - DLE"""

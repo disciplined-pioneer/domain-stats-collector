@@ -7,44 +7,51 @@ from integrations.google_sheets.google_sheets import authorize_spreadsheet, appl
 # Объедение старых данных (excel), с новыми из запроса
 async def data_merging(old_df, new_df):
 
-    # Конкатенация DataFrame
-    df = pd.concat([old_df, new_df], ignore_index=True)
-    df.replace('-', None, inplace=True)
+    old_df = old_df.copy()
+    new_df = new_df.copy()
 
-    # Преобразуем 'Timestamp' в datetime
-    df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+    # Удаляем строки с отсутствующим Website или Count
+    old_df.replace('-', None, inplace=True)
+    new_df.replace('-', None, inplace=True)
+    
+    # Сортируем по названию сайта
+    old_df = old_df.sort_values(by=['Website'])
+    new_df = new_df.sort_values(by=['Website'])
 
-    # Сортируем по Website и Timestamp и вычисляем Delta
-    df = df.sort_values(by=['Website', 'Timestamp'])
-    df['Count'] = pd.to_numeric(df['Count'], errors='coerce')
-    df['Delta'] = df.groupby('Website')['Count'].diff()
+    # Преобразуем типы
+    old_df['Timestamp'] = pd.to_datetime(old_df['Timestamp'])
+    new_df['Timestamp'] = pd.to_datetime(new_df['Timestamp'])
+    old_df['Count'] = pd.to_numeric(old_df['Count'], errors='coerce')
+    new_df['Count'] = pd.to_numeric(new_df['Count'], errors='coerce')
 
-    # Сортируем по Timestamp
-    df = df.sort_values(by=['Timestamp', 'Website'])
+    # Получаем последние Count из old_df по каждому Website
+    last_old = old_df.sort_values('Timestamp').groupby('Website').last().reset_index()
+    last_old = last_old[['Website', 'Count']].rename(columns={'Count': 'PreviousCount'})
 
-    # Заменяем NaN на '0' в Delta
-    df['Delta'] = df['Delta'].replace('nan', '0')
-    df['Delta'] = df['Delta'].fillna(0)
-    df['Delta'] = df['Delta'].apply(lambda x: 0 if x == 0.0 else x)
+    # Присоединяем к new_df последнюю старую Count по Website
+    new_df = new_df.merge(last_old, on='Website', how='left')
 
-    # Заполняем NaN значениями '-'
-    df.fillna('-', inplace=False)
+    # Вычисляем дельту
+    new_df['Delta'] = new_df['Count'] - new_df['PreviousCount']
+    new_df['Delta'] = new_df['Delta'].fillna(0).apply(lambda x: 0 if x == 0.0 else x)
 
-    # Преобразуем 'Timestamp' обратно в строку, если нужно
-    df['Timestamp'] = pd.to_datetime(df['Timestamp'], format='%Y-%m-%dT%H:%M:%S').dt.strftime('%Y-%m-%d %H:%M')
+    # Убираем вспомогательное поле
+    new_df.drop(columns=['PreviousCount'], inplace=True)
 
+    # Форматируем дату, если нужно
+    new_df['Timestamp'] = new_df['Timestamp'].dt.strftime('%Y-%m-%d %H:%M')
 
-    return df
+    return new_df
 
 
 # Функция для добавления данных в таблицу excel
 async def update_stats_sheet(time_variable: str, new_data: pd.DataFrame):
 
-    # Получаем все данные из доменов + excel
+    # Получаем все данные из доменов
     name_sheet = f"{time_variable.capitalize()}"
     old_df = await get_sheet_data_as_df(name_sheet)
     df = new_data[["Timestamp", "Website", time_variable, 'Delta', "Status"]].rename(columns={time_variable: "Count"})
-
+    
     # Преобразование и добавление данных
     result = await data_merging(old_df, df)
     values = [result.columns.tolist()] + result.values.tolist()

@@ -43,19 +43,19 @@ async def reporter_loop():
 
 
 async def main():
+    logging.info("✅ Скрипт запущен!")
+    sheet_name = settings.bot.SHEETS_NAME
+    spreadsheet = create_spreadsheet(sheet_name)  # Создаём таблицу
+    create_sheets()  # Создаём листы
     await reporter_loop()
 
 
 if __name__ == "__main__":
     try:
-        logging.info("Скрипт запущен ✅\n")
-        sheet_name = settings.bot.SHEETS_NAME
-        spreadsheet = create_spreadsheet(sheet_name)  # Создаём таблицу
-        create_sheets()  # Создаём листы
         asyncio.run(main())
 
     except KeyboardInterrupt:
-        logging.info("\n🛑 Скрипт остановлен 🛑\n")
+        logging.info("🛑 Скрипт остановлен вручную!")
 
     except Exception as e:
-        logging.error(f"\n❌ Возникла ошибка : {e}\n")
+        logging.error(f"❌ Возникла ошибка : {e}")

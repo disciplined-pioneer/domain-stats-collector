@@ -9,6 +9,7 @@ class Bot(BaseSettings):
     GSHEETS_CREDENTIALS_JSON: str
     PATH_ALL_DOMAINS_JSON: str
     SHEETS_NAME: str
+    OWNERS_EMAIL: str
 
     CHECK_INTERVAL_DAILY_CRON: str
 

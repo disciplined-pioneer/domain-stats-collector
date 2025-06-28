@@ -29,7 +29,6 @@ MANIFEST
 
 # Files
 service_account.json
-domains_config.json
 
 session_name.session
 

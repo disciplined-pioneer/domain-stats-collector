@@ -18,9 +18,6 @@ from gspread_formatting import (
     GridRange
 )
 
-# Настроим логирование
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
 
 # Нормализация для проверки слов
 def normalize(s):
@@ -48,12 +45,14 @@ def create_spreadsheet(spreadsheet_name: str) -> gspread.Spreadsheet:
         logging.info(f"Таблица '{spreadsheet_name}' уже существует.")
 
     except gspread.exceptions.SpreadsheetNotFound:
+
         logging.info(f"Таблица '{spreadsheet_name}' не найдена. Создаём новую.")
         spreadsheet = client.create(spreadsheet_name)
 
-        # Делает таблицу доступной владельцу по email
-        spreadsheet.share('maksimsarsov777@gmail.com', perm_type='user', role='writer')
-        #spreadsheet.share('analytics@analyzer-sheets-453416.iam.gserviceaccount.com', perm_type='user', role='writer')
+        # Делает таблицу доступной по email
+        spreadsheet.share(settings.bot.OWNERS_EMAIL, perm_type='user', role='writer')
+
+    logging.info(f'Ссылка на Google Sheets: {spreadsheet.url}')
 
     return spreadsheet
 
